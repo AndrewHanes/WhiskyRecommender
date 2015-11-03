@@ -49,6 +49,7 @@ def find_favorites(reviewers):
     sorted(choices, key=lambda x: average(x[1]), reverse=True)
     return choices[:5]
 
+
 def average(n):
     """
     Average some values
@@ -58,7 +59,7 @@ def average(n):
     total = 0
     for i in n:
         total += i
-    return float(total)/float(len(n))
+    return float(total) / float(len(n))
 
 
 @app.route('/suggest')
@@ -78,6 +79,21 @@ def suggest():
             sorted(reviewers, key=lambda x: x[0], reverse=True)
             favorites = find_favorites(reviewers)
             return jsonify(favorites)
+
+
+@app.route('/list')
+def list_drinks():
+    """
+    List all drinks, sorted alphabetically
+    :return:
+    """
+    conn = sqlite3.connect('reviews.sqlite3')
+    cursor = conn.cursor()
+    results = []
+    for row in cursor.execute("select name from reviews"):
+        results.append(row[0])
+    choices = list(set(results))
+    return jsonify(dict(choices=choices))
 
 
 def parse_csv(file_name):
