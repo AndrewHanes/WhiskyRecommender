@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify
 import sqlite3
 import csv
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 
 def get_reviewers(name):
@@ -62,7 +62,7 @@ def average(n):
     return float(total) / float(len(n))
 
 
-@app.route('/suggest')
+@application.route('/suggest')
 def suggest():
     """
     REST endpoint.  GET only
@@ -81,7 +81,7 @@ def suggest():
             return jsonify(favorites)
 
 
-@app.route('/list')
+@application.route('/list')
 def list_drinks():
     """
     List all drinks, sorted alphabetically
@@ -109,5 +109,5 @@ def parse_csv(file_name):
 
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run()
+    application.debug = True
+    application.run()
