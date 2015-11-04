@@ -4,6 +4,7 @@ Andrew Hanes
 
 Written for beverage fermentation and distillation
 """
+import os
 import codecs
 from flask import Flask, request, jsonify
 import sqlite3
@@ -109,5 +110,5 @@ def parse_csv(file_name):
 
 
 if __name__ == '__main__':
-    application.debug = True
-    application.run()
+        port = int(os.environ.get("PORT", 5000))
+        application.run(host='0.0.0.0', port=port)
