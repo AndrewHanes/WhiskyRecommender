@@ -41,13 +41,13 @@ def find_favorites(reviewers):
             drink_name = row[1]
             if not row[4].isdigit():
                 continue
-            drink_review = int(row[4])
+            drink_review = int(row[4]) * (float(user[0])/100)
             if drink_name in results:
                 results[drink_name].append(drink_review)
             else:
                 results[drink_name] = [drink_review]
-    choices = [(r, results[r]) for r in results]
-    sorted(choices, key=lambda x: average(x[1]), reverse=True)
+    choices = [(r, average(results[r])) for r in results]
+    choices = sorted(choices, key=lambda x: x[1], reverse=True)
     return choices[:5]
 
 
