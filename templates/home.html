@@ -35,7 +35,7 @@
                                 <button class="col-md-2 text-center btn btn-danger btn-lg"
                                         ng-if="booze.expand" 
                                         ng-click="booze.expand=false"></button>
-                                <button class="col-md-2 text-center btn btn-warning btn-lg"
+                                <button class="col-md-4 text-center btn btn-warning btn-lg"
                                         ng-if="!booze.expand" 
                                         ng-click="booze.expand=true"></button>
                             </td>
@@ -56,14 +56,14 @@
         <!-- Pagination button control -->
         <div class="row">
             <div class="col-xs-12 col-md-10">
-                <button class="col-md-4 btn btn-warning" 
+                <button class="col-xs-4 col-md-4 btn btn-warning" 
                         ng-disabled="pgCur == 0" ng-click="pgCur=pgCur-1">
                     Previous
                 </button>
-                <p class="col-md-2 text-center">
+                <p class="col-xs-4 col-md-2 text-center">
                     {{pgCur+1}}/{{pgTotal(filtered.length)}}
                 </p>
-                <button class="col-md-4 btn btn-warning"
+                <button class="col-xs-4 col-md-4 btn btn-warning"
                        ng-disabled="pgCur >= filtered.length/pgSize - 1" 
                        ng-click="pgCur=pgCur+1">
                     Next

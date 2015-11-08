@@ -17,7 +17,7 @@ boozeDataApp.controller('BoozeListCtrl', function ($scope, $http) {
     $http.get('/list').success(function(data) {
         $scope.boozeTypes = data['choices'];
         // pagination vars
-        $scope.pgSize = 30;
+        $scope.pgSize = 16;
 
         $scope.pgTotal=function(filterLen) {
             return Math.ceil(filterLen/$scope.pgSize)
