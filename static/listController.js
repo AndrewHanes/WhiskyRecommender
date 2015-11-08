@@ -17,8 +17,11 @@ boozeDataApp.controller('BoozeListCtrl', function ($scope, $http) {
     $http.get('/list').success(function(data) {
         $scope.boozeTypes = data['choices'];
         // pagination vars
-        $scope.pgSize = 20;
-        $scope.pgTotal = Math.ceil($scope.boozeTypes.length/$scope.pgSize)
+        $scope.pgSize = 30;
+
+        $scope.pgTotal=function(filterLen) {
+            return Math.ceil(filterLen/$scope.pgSize)
+        }
         $scope.pgCur = 0;
         //search param
         $scope.searchBooze = '';

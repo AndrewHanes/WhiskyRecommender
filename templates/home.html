@@ -30,7 +30,7 @@
                         <th>Name</th>
                     </thead>
                     <tbody>
-                        <tr ng:repeat="booze in boozeTypes | filter:searchBooze | startFrom:pgCur * pgSize | limitTo:pgSize">
+                        <tr ng:repeat="booze in filtered = (boozeTypes | filter:searchBooze) | startFrom:pgCur * pgSize | limitTo:pgSize">
                             <td>
                                 <button class="col-md-2 text-center btn btn-danger btn-lg"
                                         ng-if="booze.expand" 
@@ -61,10 +61,10 @@
                     Previous
                 </button>
                 <p class="col-md-2 text-center">
-                    {{pgCur+1}}/{{pgTotal}}
+                    {{pgCur+1}}/{{pgTotal(filtered.length)}}
                 </p>
                 <button class="col-md-4 btn btn-warning"
-                       ng-disabled="pgCur >= boozeTypes.length/pgSize - 1" 
+                       ng-disabled="pgCur >= filtered.length/pgSize - 1" 
                        ng-click="pgCur=pgCur+1">
                     Next
                 </button>
