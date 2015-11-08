@@ -1,12 +1,13 @@
 """
 Whisky recommendation system
-Andrew Hanes
+@author Andrew Hanes
+@author Schuyler Martin
 
 Written for beverage fermentation and distillation
 """
 import os
 import codecs
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import sqlite3
 import csv
 
@@ -108,6 +109,30 @@ def parse_csv(file_name):
     for row in reader:
         print(row)
 
+@application.route('/')
+def home():
+  """
+  Home page control code
+  :return Rendered page:
+  """
+  return render_template('home.html')
+
+@application.route('/viewList')
+def list():
+  """
+  List control code
+  This is different from the rest endpoint for debugging & sanity purposes
+  :return Rendered page:
+  """
+  return render_template('viewList.html')
+
+@application.route('/about')
+def about():
+  """
+  Search control code
+  :return Rendered page:
+  """
+  return render_template('about.html')
 
 if __name__ == '__main__':
         port = int(os.environ.get("PORT", 5000))
