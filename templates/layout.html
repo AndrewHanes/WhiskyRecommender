@@ -1,4 +1,4 @@
-<html lang="en-US">
+<html ng-app="boozeDataApp" lang="en-US">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
         <title>Booze Ratings</title>
@@ -6,6 +6,12 @@
 
         <!-- Include jQuery for Boostrap -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+        <!-- AngularJS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+
+        <!-- Our custom AngularJS code -->
+        <script src="{{ url_for('static', filename='listController.js') }}"></script>
 
         <!-- Bootstrap loaded from a CDN -->
         <!-- Latest compiled and minified CSS -->
@@ -33,7 +39,6 @@
           <div class="collapse navbar-collapse" id="navigationBar">
             <ul class="nav navbar-nav">
               <li><a href="/">Home</a></li>
-              <li><a href="/viewList">Listings</a></li>
               <li><a href="/about">About</a></li>
             </ul>
           </div>

@@ -95,7 +95,13 @@ def list_drinks():
     for row in cursor.execute("select name from reviews"):
         results.append(row[0])
     choices = list(set(results))
-    return jsonify(dict(choices=choices))
+    # convert list to a more AngularJS-friendly JSON object format
+    for cntr in range(0, len(choices)):
+        itemDict = {}
+        itemDict["id"] = cntr + 1
+        itemDict["name"] = choices[cntr]
+        choices[cntr]=itemDict
+    return jsonify(choices=choices)
 
 
 def parse_csv(file_name):
@@ -117,15 +123,6 @@ def home():
   """
   return render_template('home.html')
 
-@application.route('/viewList')
-def list():
-  """
-  List control code
-  This is different from the rest endpoint for debugging & sanity purposes
-  :return Rendered page:
-  """
-  return render_template('viewList.html')
-
 @application.route('/about')
 def about():
   """
@@ -136,4 +133,4 @@ def about():
 
 if __name__ == '__main__':
         port = int(os.environ.get("PORT", 5000))
-        application.run(host='0.0.0.0', port=port)
+        application.run(debug=True, host='0.0.0.0', port=port)
