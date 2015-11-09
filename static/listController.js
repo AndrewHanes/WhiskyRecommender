@@ -13,18 +13,25 @@ boozeDataApp.filter('startFrom', function () {
 });
 
 // define the MVC controller
-boozeDataApp.controller('BoozeListCtrl', function ($scope, $http) {
+boozeDataApp.controller('BoozeListCtrl', function ($scope, $http, $q) {
     $http.get('/list').success(function(data) {
         $scope.boozeTypes = data['choices'];
-        // pagination vars
+        // pagination vars/functs
         $scope.pgSize = 16;
-
-        $scope.pgTotal=function(filterLen) {
-            return Math.ceil(filterLen/$scope.pgSize)
+        $scope.pgTotal = function(filterLen) {
+            return Math.ceil(filterLen/$scope.pgSize);
         }
         $scope.pgCur = 0;
         //search param
         $scope.searchBooze = '';
+        //handle dynamic recomendations loading
+        $scope.suggest = {}
+        $scope.clickSuggest = function(booze) {
+            booze.expand = true;
+            $http.get('/suggest', {params: {"name": booze.name}}).then( function(data) {
+                $scope.suggest[booze.name] = data.data['favorites'];
+            })
+        }
     });
     $scope.orderProp = 'age';
 });

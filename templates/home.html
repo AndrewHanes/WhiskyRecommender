@@ -4,8 +4,8 @@
         <!-- raw/endraw tags tell flask to ignore this section, allowing AngularJs to work -->
         {% raw %}
         <div class="page-header">
-            <h1>Booze Recommender</h1>
-            <p>Let Reddit recommend you some booze!</p>
+            <h1>Whiskey Recommender</h1>
+            <p>Let Reddit recommend you some whiskey!</p>
         </div>
         <div class="row">
             <div class="col-xs-12 col-md-10">
@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="glyphicon glyphicon-search input-group-addon"></div>
-                            <input type="text" class="form-control" 
+                            <input type="text" class="form-control" ng-change="pgCur = 0" 
                                     placeholder="Search" ng-model="searchBooze.name">
                         </div>
                     </div>
@@ -37,16 +37,34 @@
                                         ng-click="booze.expand=false"></button>
                                 <button class="col-md-4 text-center btn btn-warning btn-lg"
                                         ng-if="!booze.expand" 
-                                        ng-click="booze.expand=true"></button>
+                                        ng-click="clickSuggest(booze)"></button>
                             </td>
                             <td>
                                 {{booze.id}}
                             </td>
                             <td>
-                                {{booze.name}}
-                            </td>
-                            <td ng-if="booze.expand" ng-repeat-end="">
-                                Expanded
+                                <div>
+                                    {{booze.name}}
+                                    <div ng-if="booze.expand" ng-repeat-end="">
+                                        <ul ng:repeat="bRec in suggest[booze.name] | orderBy:score">
+                                            <li>
+                                                <div class="col-md-10">
+                                                    <div class="col-md-8">
+                                                        {{bRec.name}}
+                                                    </div>
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-2 label label-warning">
+                                                        {{bRec.score | number:2}}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <!-- Fail-over; no suggestions -->
+                                        <div ng-if="suggest[booze.name] === nil" class="col-md-10">
+                                            &nbsp;&nbsp;No suggestions available.
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </tbody>

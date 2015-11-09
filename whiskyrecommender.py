@@ -80,7 +80,15 @@ def suggest():
             reviewers = get_reviewers(request.args.get('name'))
             sorted(reviewers, key=lambda x: x[0], reverse=True)
             favorites = find_favorites(reviewers)
-            return jsonify(favorites)
+            # convert list to a more AngularJS-friendly JSON object format
+            cntr = 0
+            for (key,val) in favorites:
+                itemDict = {}
+                itemDict["name"] = key
+                itemDict["score"] = val
+                favorites[cntr] = itemDict
+                cntr += 1
+            return jsonify(favorites=favorites)
 
 
 @application.route('/list')
