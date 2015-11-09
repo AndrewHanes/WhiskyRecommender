@@ -3,12 +3,12 @@
     <div class="container"   ng-controller="BoozeListCtrl">
         <!-- raw/endraw tags tell flask to ignore this section, allowing AngularJs to work -->
         {% raw %}
-        <div class="page-header">
+        <div class="page-header col-xs-12 col-md-10">
             <h1>Whiskey Recommender</h1>
             <p>Let Reddit recommend you some whiskey!</p>
         </div>
         <div class="row">
-            <div class="col-xs-12 col-md-12">
+            <div class="col-xs-12 col-md-10">
                 <form>
                     <div class="form-group">
                         <div class="input-group">
@@ -22,10 +22,10 @@
         </div>
         <!-- AngularJS dynamic tabling -->
         <div class="row">
-            <div class="col-xs-12 col-md-12">
+            <div class="col-xs-12 col-md-10">
                 <table class="table table-hover">
                     <thead>
-                        <th>&nbsp;</th>
+                        <th>+/-</th>
                         <th>#</th>
                         <th>Name</th>
                     </thead>
@@ -35,33 +35,35 @@
                                 <button class="col-md-2 text-center btn btn-danger btn-lg"
                                         ng-if="booze.expand" 
                                         ng-click="booze.expand=false"></button>
-                                <button class="col-md-4 text-center btn btn-warning btn-lg"
+                                <button class="col-md-2 text-center btn btn-warning btn-lg"
                                         ng-if="!booze.expand" 
                                         ng-click="clickSuggest(booze)"></button>
                             </td>
                             <td>
-                                {{booze.id}}
+                                <h4>
+                                    <span class="label label-warning">{{booze.id}}</span>
+                                </h4>
                             </td>
                             <td>
                                 <div>
-                                    {{booze.name}}
-                                    <div ng-if="booze.expand" ng-repeat-end="">
-                                        <ul ng:repeat="bRec in suggest[booze.name] | orderBy:score">
-                                            <li>
-                                                <div class="col-md-12">
-                                                    <div class="col-md-10">
-                                                        {{bRec.name}}
-                                                    </div>
-                                                    <div class="col-md-2 label label-warning">
-                                                        {{bRec.score | number:2}}
-                                                    </div>
-                                                </div>
+                                    <div class="list-group">
+                                    <span class="list-group-item list-group-item-info">
+                                        {{booze.name}}
+                                    </span>
+                                    </div>
+                                    <div ng-cloak ng-if="booze.expand" ng-repeat-end="">
+                                        <ul class="list-group" ng:repeat="bRec in suggest[booze.name] | orderBy:score">
+                                            <li class="list-group-item list-group-item-warning">
+                                                <span class="badge">{{bRec.score | number:2}}</span>
+                                                {{bRec.name}}
                                             </li>
                                         </ul>
                                         <!-- Fail-over; no suggestions -->
-                                        <div ng-if="suggest[booze.name] === nil" class="col-md-10">
-                                            &nbsp;&nbsp;No suggestions available.
-                                        </div>
+                                        <ul ng-cloak ng-if="suggest[booze.name] === nil" class="list-group">
+                                            <li class="list-group-item list-group-item-danger">
+                                                No suggestions available.
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </td>
@@ -72,15 +74,15 @@
         </div>
         <!-- Pagination button control -->
         <div class="row">
-            <div class="col-xs-12 col-md-12">
-                <button class="col-xs-4 col-md-5 btn btn-warning" 
+            <div class="col-xs-12 col-md-10">
+                <button class="col-xs-4 col-md-4 btn btn-warning" 
                         ng-disabled="pgCur == 0" ng-click="pgCur=pgCur-1">
                     Previous
                 </button>
                 <p class="col-xs-4 col-md-2 text-center">
                     {{pgCur+1}}/{{pgTotal(filtered.length)}}
                 </p>
-                <button class="col-xs-4 col-md-5 btn btn-warning"
+                <button class="col-xs-4 col-md-4 btn btn-warning"
                        ng-disabled="pgCur >= filtered.length/pgSize - 1" 
                        ng-click="pgCur=pgCur+1">
                     Next
