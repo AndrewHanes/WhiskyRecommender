@@ -1,23 +1,13 @@
 /* Custom CSS file */
-body {
-    background-color: #fbe0bc;
+.about_container {
+    padding-top: 3em;
 }
 
-body > .container {
-    padding: 60px 15px 0;
-    //color: #F5F5F5;
-    //background-color: #fbead4;
+.home_prevnext {
+    padding-top: 1em;
 }
 
-.header {
-    //background-color: #1C1C1C;
-    //border-color: #F5F5F5;
-    border-bottom: 2px solid;
-}
-
-.footer {
-    //background-color: #1C1C1C;
-    //border-color: #F5F5F5;
-    border-top: 2px solid;
-    padding-top: 2px;
+.home_footer {
+    padding-top: 2em;
+    padding-bottom: 1em;
 }

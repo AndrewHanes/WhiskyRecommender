@@ -25,7 +25,7 @@
 
 
     <!-- Nav bar code at the top -->
-    <nav id="navMenu" class="header navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav id="navMenu" class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigationBar">
@@ -38,7 +38,6 @@
           </div>
           <div class="collapse navbar-collapse" id="navigationBar">
             <ul class="nav navbar-nav">
-              <li><a href="/">Home</a></li>
               <li><a href="/about">About</a></li>
             </ul>
           </div>
@@ -46,9 +45,14 @@
     </nav>
 
     <!-- Flask injects page specifics here -->
-    <div class="container">
-      {% block content %}
-      {% endblock %}
+    {% block content %}
+    {% endblock %}
+    <!-- Footer for padding -->
+    <div class="footer home_footer">
+        <div class="container">
+            <p class="text-muted">
+              Copyright &copy; Martin &amp; Hanes
+            </p>
+        </div>
     </div>
-
 </html>
