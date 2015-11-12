@@ -32,12 +32,12 @@
                                         <button class="col-xs-12 btn btn-warning btn-lg"
                                             ng-if="!booze.expand" 
                                             ng-click="clickSuggest(booze)">
-                                            <p style="color:black"> {{booze.name}}</p>
+                                            <span style="color:black">{{booze.name}}</span>
                                         </button>
                                         <button class="col-xs-12 btn btn-warning btn-lg"
                                             ng-if="booze.expand"
                                             ng-click="booze.expand=false">
-                                            <p style="color:black"> {{booze.name}}</p>
+                                            <span style="color:black">{{booze.name}}</span>
                                         </button>
                                     </div>
                                     <div class="row" ng-cloak ng-if="booze.expand" ng-repeat-end="">
@@ -64,9 +64,9 @@
         <!-- Pagination button control -->
         <div class="row home_prevnext">
             <div class="col-xs-12">
-                <button class="col-xs-4 btn btn-warning" 
+                <button class="col-xs-4 btn btn-warning"
                         ng-disabled="pgCur == 0" ng-click="pgCur=pgCur-1">
-                    Previous
+                    <span style="color:black">Previous</span>
                 </button>
                 <p class="col-xs-4 text-center" ng-if="pgTotal(filtered.length) <= 0">
                     0/{{pgTotal(filtered.length)}}
@@ -77,7 +77,7 @@
                 <button class="col-xs-4 btn btn-warning"
                        ng-disabled="pgCur >= filtered.length/pgSize - 1" 
                        ng-click="pgCur=pgCur+1">
-                    Next
+                    <span style="color:black">Next</span>
                 </button>
             </div>
         </div>
