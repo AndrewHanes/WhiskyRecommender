@@ -40,6 +40,18 @@
             <ul class="nav navbar-nav">
               <li><a href="/about">About</a></li>
             </ul>
+              {% block login %}
+                  {% if not user %}
+                    <ul class="nav navbar-nav">
+                        <li><a href="https://www.reddit.com/api/v1/authorize?client_id=hVZq4ed0FE6amw&response_type=code&state=test&redirect_uri=http://booze.ahanes.com/&duration=permanent&scope=identity">Login</a></li>
+                    </ul>
+                  {% endif %}
+                  {% if user %}
+                      <ul class="nav navbar-nav">
+                          <li><a href="#">Logged in as {{ user }}</a></li>
+                      </ul>
+                  {% endif %}
+              {% endblock %}
           </div>
         </div>
     </nav>
