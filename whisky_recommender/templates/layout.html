@@ -54,13 +54,11 @@
               {% endblock %}
           </div>
         {% block error %}
-            {% if errror %}
-                <div class="alert alert-danger" role="alert">
-                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                  <span class="sr-only">Error:</span>
-                        {{ error }}
-                </div>
-            {% endif %}
+        <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+                {{ error }}
+        </div>
         {% endblock %}
         </div>
     </nav>
