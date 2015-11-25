@@ -78,11 +78,11 @@ def home():
             session['user'] = username
             session['token'] = tok
             session.modified = True
-            return render_template('home.html', user=session['user'])
+            return render_template('home.html', user=session['user'], error=False)
         except Exception as e:
             return render_template('home.html', error="Error " + str(e))
     else:
-        return render_template('home.html', user=False)
+        return render_template('home.html', user=False, error=False)
 
 
 @application.route('/about')
