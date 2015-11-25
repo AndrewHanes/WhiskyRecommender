@@ -81,8 +81,7 @@ def home():
             return render_template('home.html', user=session['user'])
         except Exception as e:
             import logging
-            logging.error(str(e))
-            return render_template('home.html', error="Cannot authenticate user")
+            return render_template('home.html', error=str(e))
     else:
         return render_template('home.html', user=False)
 
