@@ -81,8 +81,8 @@ def home():
             return render_template('home.html', user=session['user'], error=False)
         except Exception as e:
             return render_template('home.html', error="Error " + str(e))
-    else:
-        return render_template('home.html', user=False, error=False)
+    user = session['user'] if 'user' in session else False
+    return render_template('home.html', user=False, error=user)
 
 
 @application.route('/about')
