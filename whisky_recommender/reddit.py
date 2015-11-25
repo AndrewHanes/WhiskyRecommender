@@ -19,7 +19,7 @@ def reddit_get_access_token(code):
 
 
 def reddit_get_username(tok):
-    headers = {"Authorization": "bearer " + tok}
-    response = requests.post("https://oauth.reddit.com/api/v1/me", headers=headers)
+    headers = {"Authorization": "bearer " + tok, 'User-Agent': '<webapp>:<.2>:<beta> (by /u/mahaa134)'}
+    response = requests.get("https://oauth.reddit.com/api/v1/me", headers=headers)
     json = response.json()
     return json['name']
