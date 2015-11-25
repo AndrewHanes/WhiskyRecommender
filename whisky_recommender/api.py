@@ -81,7 +81,7 @@ def home():
             return render_template('home.html', user=session['user'])
         except Exception as e:
             import logging
-            return render_template('home.html', error=str(e))
+            return render_template('home.html', error="Error " + str(e))
     else:
         return render_template('home.html', user=False)
 
