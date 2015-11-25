@@ -72,11 +72,15 @@ def home():
     error = request.args.get("error", None)
     state, code = request.args.get("state", None), request.args.get("code", None)
     if state == "test" and code and not 'user' in session:
-        tok = reddit_get_access_token(code)
-        username = reddit_get_username(tok)
-        session['user'] = username
-        session.modified = True
-        return render_template('home.html', user=session['user'])
+        try:
+            tok = reddit_get_access_token(code)
+            username = reddit_get_username(tok)
+            session['user'] = username
+            session['token'] = tok
+            session.modified = True
+            return render_template('home.html', user=session['user'])
+        except Exception as e:
+            return render_template('home.html', error="Cannot authenticate user")
     else:
         return render_template('home.html', user=False)
 
