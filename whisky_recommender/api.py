@@ -62,7 +62,7 @@ def list_drinks():
         itemDict["id"] = cntr + 1
         itemDict["name"] = choices[cntr]
         choices[cntr] = itemDict
-    sorted(choices, key=lambda x: x['name'])
+    choices = sorted(choices, key=lambda x: x['name'])
     return jsonify(choices=choices)
 
 
