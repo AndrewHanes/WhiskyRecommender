@@ -5,6 +5,7 @@ Whisky recommendation system
 
 Written for beverage fermentation and distillation
 """
+from uuid import uuid4
 import sqlite3
 import flask
 from flask import Flask, request, jsonify, render_template, session
@@ -80,15 +81,17 @@ def home():
   """
     error = request.args.get("error", None)
     state, code = request.args.get("state", None), request.args.get("code", None)
-    if state == "test" and code and not has_user():
+    if code and not has_user() and 'state' in session and session['state'] == state:
         tok = reddit_get_access_token(code)
         username = reddit_get_username(tok)
         session['user'] = username
         session['token'] = tok
         session.modified = True
+    session['state'] = str(uuid4())
+    session.modified = True
     return render_template('home.html', user=get_user(),
                            error=False, redirect=whisky_recommender.config.REDDIT_REDIRECT,
-                           client_id=whisky_recommender.config.REDDIT_CLIENT)
+                           client_id=whisky_recommender.config.REDDIT_CLIENT, state=session['state'])
 
 
 @application.route('/about')
@@ -97,9 +100,11 @@ def about():
   Search control code
   :return Rendered page:
   """
+    session['state'] = str(uuid4())
+    session.modified = True
     return render_template('about.html', user=get_user(),
                            redirect=whisky_recommender.config.REDDIT_REDIRECT,
-                           client_id=whisky_recommender.config.REDDIT_CLIENT)
+                           client_id=whisky_recommender.config.REDDIT_CLIENT, state=session['state'])
 
 
 @application.route('/logout')

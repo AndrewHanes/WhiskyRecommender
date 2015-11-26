@@ -43,7 +43,7 @@
               {% block login %}
                   {% if not user %}
                     <ul class="nav navbar-nav">
-                        <li><a href="https://www.reddit.com/api/v1/authorize?client_id={{ client_id }}&response_type=code&state=test&redirect_uri={{ redirect }}&duration=permanent&scope=identity">Login</a></li>
+                        <li><a href="https://www.reddit.com/api/v1/authorize?client_id={{ client_id }}&response_type=code&state={{ state }}&redirect_uri={{ redirect }}&duration=permanent&scope=identity">Login</a></li>
                     </ul>
                   {% endif %}
                   {% if user %}
