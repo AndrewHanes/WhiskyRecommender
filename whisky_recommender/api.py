@@ -7,7 +7,10 @@ Written for beverage fermentation and distillation
 """
 import os
 import sqlite3
+
+import flask
 from flask import Flask, request, jsonify, render_template, session
+
 from whisky_recommender.reddit import reddit_get_access_token, reddit_get_username
 from whisky_recommender.suggest_lib import get_reviewers, find_favorites
 
@@ -92,3 +95,10 @@ def about():
   :return Rendered page:
   """
     return render_template('about.html', user=session['user'] if 'user' in session else False)
+
+
+@application.route('/logout')
+def logout():
+    if 'user' in session:
+        session.popitem('user')
+    flask.redirect("/")
