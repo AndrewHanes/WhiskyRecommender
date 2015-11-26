@@ -5,17 +5,15 @@ Whisky recommendation system
 
 Written for beverage fermentation and distillation
 """
-import os
 import sqlite3
-
 import flask
 from flask import Flask, request, jsonify, render_template, session
-
 from whisky_recommender.reddit import reddit_get_access_token, reddit_get_username
 from whisky_recommender.suggest_lib import get_reviewers, find_favorites
+import whisky_recommender.config
 
 application = Flask(__name__)
-application.secret_key = os.environ['REDDIT_SECRET']
+application.secret_key = whisky_recommender.config.REDDIT_SECRET
 
 
 @application.route('/suggest')
@@ -82,17 +80,15 @@ def home():
   """
     error = request.args.get("error", None)
     state, code = request.args.get("state", None), request.args.get("code", None)
-    if state == "test" and code and has_user():
-        try:
-            tok = reddit_get_access_token(code)
-            username = reddit_get_username(tok)
-            session['user'] = username
-            session['token'] = tok
-            session.modified = True
-            return render_template('home.html', user=get_user(), error=False)
-        except Exception as e:
-            return render_template('home.html', error="Error " + str(e))
-    return render_template('home.html', user=get_user())
+    if state == "test" and code and not has_user():
+        tok = reddit_get_access_token(code)
+        username = reddit_get_username(tok)
+        session['user'] = username
+        session['token'] = tok
+        session.modified = True
+    return render_template('home.html', user=get_user(),
+                           error=False, redirect=whisky_recommender.config.REDDIT_REDIRECT,
+                           client_id=whisky_recommender.config.REDDIT_CLIENT)
 
 
 @application.route('/about')
@@ -101,11 +97,13 @@ def about():
   Search control code
   :return Rendered page:
   """
-    return render_template('about.html', user=get_user())
+    return render_template('about.html', user=get_user(),
+                           redirect=whisky_recommender.config.REDDIT_REDIRECT,
+                           client_id=whisky_recommender.config.REDDIT_CLIENT)
 
 
 @application.route('/logout')
 def logout():
     if 'user' in session:
-        session.popitem('user', None)
-    flask.redirect("/")
+        session['user'] = False
+    return flask.redirect("/")
