@@ -71,7 +71,7 @@ def home():
   """
     error = request.args.get("error", None)
     state, code = request.args.get("state", None), request.args.get("code", None)
-    if state == "test" and code and not 'user' in session:
+    if state == "test" and code and 'user' not in session:
         try:
             tok = reddit_get_access_token(code)
             username = reddit_get_username(tok)
@@ -82,7 +82,7 @@ def home():
         except Exception as e:
             return render_template('home.html', error="Error " + str(e))
     user = session['user'] if 'user' in session else False
-    return render_template('home.html', user=False, error=user)
+    return render_template('home.html', error=user)
 
 
 @application.route('/about')
