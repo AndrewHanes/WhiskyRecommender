@@ -91,4 +91,4 @@ def about():
   Search control code
   :return Rendered page:
   """
-    return render_template('about.html')
+    return render_template('about.html', user=session['user'] if 'user' in session else False)
