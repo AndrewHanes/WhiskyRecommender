@@ -66,6 +66,14 @@ def list_drinks():
     return jsonify(choices=choices)
 
 
+def has_user():
+    return 'user' in session and session['user']
+
+
+def get_user():
+    return session['user'] if has_user() else False
+
+
 @application.route('/')
 def home():
     """
@@ -74,18 +82,17 @@ def home():
   """
     error = request.args.get("error", None)
     state, code = request.args.get("state", None), request.args.get("code", None)
-    if state == "test" and code and 'user' not in session:
+    if state == "test" and code and has_user():
         try:
             tok = reddit_get_access_token(code)
             username = reddit_get_username(tok)
             session['user'] = username
             session['token'] = tok
             session.modified = True
-            return render_template('home.html', user=session['user'], error=False)
+            return render_template('home.html', user=get_user(), error=False)
         except Exception as e:
             return render_template('home.html', error="Error " + str(e))
-    user = session['user'] if 'user' in session else False
-    return render_template('home.html', user=user)
+    return render_template('home.html', user=get_user())
 
 
 @application.route('/about')
@@ -94,11 +101,11 @@ def about():
   Search control code
   :return Rendered page:
   """
-    return render_template('about.html', user=session['user'] if 'user' in session else False)
+    return render_template('about.html', user=get_user())
 
 
 @application.route('/logout')
 def logout():
     if 'user' in session:
-        session.popitem('user')
+        session.popitem('user', None)
     flask.redirect("/")
