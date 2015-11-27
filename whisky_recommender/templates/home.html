@@ -34,6 +34,11 @@
                                         ng-click="clickSuggest(booze)">
                                         <span style="color:black">{{booze.name}}</span>
                                     </button>
+                                    <button class="col-xs-12 btn btn-warning btn-lg"
+                                        ng-if="booze.expand"
+                                        ng-click="booze.expand=false">
+                                        <span style="color:black">{{booze.name}}</span>
+                                    </button>
                                     <fieldset id='{{booze.name}}' class="rating">
                                         <input class="stars" type="radio" id="star5" name="rating" value="5" />
                                         <label class = "full" for="star5" title="Awesome - 5 stars"></label>
@@ -46,11 +51,6 @@
                                         <input class="stars" type="radio" id="star1" name="rating" value="1" />
                                         <label class = "full" for="star1" title="Sucks big time - 1 star"></label>
                                     </fieldset>
-                                    <button class="col-xs-12 btn btn-warning btn-lg"
-                                        ng-if="booze.expand"
-                                        ng-click="booze.expand=false">
-                                        <span style="color:black">{{booze.name}}</span>
-                                    </button>
                                 </div>
                                 <div class="row" ng-cloak ng-if="booze.expand" ng-repeat-end="">
                                     <ul class="list-group" ng:repeat="bRec in suggest[booze.name] | orderBy:score">
