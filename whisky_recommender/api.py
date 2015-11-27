@@ -2,6 +2,7 @@
 Whisky recommendation system
 @author Andrew Hanes
 @author Schuyler Martin
+@author Ethan House
 
 Written for beverage fermentation and distillation
 """
