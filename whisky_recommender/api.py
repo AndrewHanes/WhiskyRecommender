@@ -66,6 +66,28 @@ def list_drinks():
     choices = sorted(choices, key=lambda x: x['name'])
     return jsonify(choices=choices)
 
+@application.route('/rate', methods = ['GET', 'POST', 'DELETE'])
+def rate():
+    user = get_user()
+    if not user:
+        raise Exception("Not Logged In")
+
+    if request.method == 'GET':
+        """Returns list of all reviews by user"""
+        conn = sqlite3.connect('reviews.sqlite3')
+        cursor = conn.cursor()
+        results = []
+        for row in cursor.execute("select user,name,rating from reviews where user='{0}'".format("headlessparrot")):
+            results.append(row)
+        return jsonify(user_rating=results)
+
+    if request.method == 'POST':
+        """modify/update the rating for user"""
+        data = request.form # a multidict containing POST data
+
+    if request.method == 'DELETE':
+        """Delete rating for user"""
+        pass
 
 def has_user():
     return 'user' in session and session['user']
