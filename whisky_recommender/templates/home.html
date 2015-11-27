@@ -39,18 +39,6 @@
                                         ng-click="booze.expand=false">
                                         <span style="color:black">{{booze.name}}</span>
                                     </button>
-                                    <fieldset id='{{booze.name}}' class="rating">
-                                        <input class="stars" type="radio" id="star5" name="rating" value="5" />
-                                        <label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                                        <input class="stars" type="radio" id="star4" name="rating" value="4" />
-                                        <label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                                        <input class="stars" type="radio" id="star3" name="rating" value="3" />
-                                        <label class = "full" for="star3" title="Meh - 3 stars"></label>
-                                        <input class="stars" type="radio" id="star2" name="rating" value="2" />
-                                        <label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                                        <input class="stars" type="radio" id="star1" name="rating" value="1" />
-                                        <label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                                    </fieldset>
                                 </div>
                                 <div class="row" ng-cloak ng-if="booze.expand" ng-repeat-end="">
                                     <ul class="list-group" ng:repeat="bRec in suggest[booze.name] | orderBy:score">
@@ -95,19 +83,4 @@
     </div>
     {% endraw %}
 </div>
-<script>
-    $(document).ready(function () {
-        $("#demo1 .stars").click(function () {
-            $.post('_rating',{rate:$(this).val()},function(d){
-                if(d>0)
-                {
-                    alert('You already rated');
-                    }else{
-                    alert('Thanks For Rating');
-                }
-            });
-            $(this).attr("checked");
-        });
-    });
-</script>
 {% endblock %}
