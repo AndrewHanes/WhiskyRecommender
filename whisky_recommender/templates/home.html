@@ -1,86 +1,86 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container about_container" ng-controller="BoozeListCtrl">
-  <!-- raw/endraw tags tell flask to ignore this section, allowing AngularJs to work -->
-  {% raw %}
-  <div class="page-header col-xs-12">
-    <h1>Whiskey Recommender</h1>
-    <p>Let Reddit recommend you some whiskey!</p>
-  </div>
-  <div class="row">
-    <div class="col-xs-12">
-      <form>
-        <div class="form-group">
-          <div class="input-group">
-            <div class="glyphicon glyphicon-search input-group-addon"></div>
-            <input type="text" class="form-control" ng-change="pgCur = 0" 
-                                                    placeholder="Search" ng-model="searchBooze.name">
-          </div>
+    <!-- raw/endraw tags tell flask to ignore this section, allowing AngularJs to work -->
+    {% raw %}
+    <div class="page-header col-xs-12">
+        <h1>Whiskey Recommender</h1>
+        <p>Let Reddit recommend you some whiskey!</p>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <form>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="glyphicon glyphicon-search input-group-addon"></div>
+                        <input type="text" class="form-control" ng-change="pgCur = 0" 
+                        placeholder="Search" ng-model="searchBooze.name">
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
     </div>
-  </div>
-  <!-- AngularJS dynamic tabling -->
-  <div class="row">
-    <div class="col-xs-12">
-      <table class="table table-hover">
-        <tbody>
-          <tr ng:repeat="booze in filtered = (boozeTypes | filter:searchBooze) | startFrom:pgCur * pgSize | limitTo:pgSize">
-            <td>
-              <div class="container list-group">
-                <div class="row" style="padding-bottom:1em">
-                  <button class="col-xs-12 btn btn-warning btn-lg"
-                          ng-if="!booze.expand" 
-                          ng-click="clickSuggest(booze)">
-                    <span style="color:black">{{booze.name}}</span>
-                  </button>
-                  <button class="col-xs-12 btn btn-warning btn-lg"
-                          ng-if="booze.expand"
-                          ng-click="booze.expand=false">
-                    <span style="color:black">{{booze.name}}</span>
-                  </button>
-                </div>
-                <div class="row" ng-cloak ng-if="booze.expand" ng-repeat-end="">
-                  <ul class="list-group" ng:repeat="bRec in suggest[booze.name] | orderBy:score">
-                    <li class="list-group-item list-group-item-warning">
-                      <span class="badge">{{bRec.score | number:2}}</span>
-                      {{bRec.name}}
-                    </li>
-                  </ul>
-                  <!-- Fail-over; no suggestions -->
-                  <ul ng-cloak ng-if="suggest[booze.name] === nil" class="list-group">
-                    <li class="list-group-item list-group-item-danger">
-                      No suggestions available.
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- AngularJS dynamic tabling -->
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-hover">
+                <tbody>
+                    <tr ng:repeat="booze in filtered = (boozeTypes | filter:searchBooze) | startFrom:pgCur * pgSize | limitTo:pgSize">
+                        <td>
+                            <div class="container list-group">
+                                <div class="row" style="padding-bottom:1em">
+                                    <button class="col-xs-12 btn btn-warning btn-lg"
+                                        ng-if="!booze.expand" 
+                                        ng-click="clickSuggest(booze)">
+                                        <span style="color:black">{{booze.name}}</span>
+                                    </button>
+                                    <button class="col-xs-12 btn btn-warning btn-lg"
+                                        ng-if="booze.expand"
+                                        ng-click="booze.expand=false">
+                                        <span style="color:black">{{booze.name}}</span>
+                                    </button>
+                                </div>
+                                <div class="row" ng-cloak ng-if="booze.expand" ng-repeat-end="">
+                                    <ul class="list-group" ng:repeat="bRec in suggest[booze.name] | orderBy:score">
+                                        <li class="list-group-item list-group-item-warning">
+                                        <span class="badge">{{bRec.score | number:2}}</span>
+                                        {{bRec.name}}
+                                        </li>
+                                    </ul>
+                                    <!-- Fail-over; no suggestions -->
+                                    <ul ng-cloak ng-if="suggest[booze.name] === nil" class="list-group">
+                                        <li class="list-group-item list-group-item-danger">
+                                        No suggestions available.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  <!-- Pagination button control -->
-  <div class="row home_prevnext">
-    <div class="col-xs-12">
-      <button class="col-xs-4 btn btn-warning"
-              ng-disabled="pgCur == 0" ng-click="pgCur=pgCur-1">
-        <span style="color:black">Previous</span>
-      </button>
-      <p class="col-xs-4 text-center" ng-if="pgTotal(filtered.length) <= 0">
-      0/{{pgTotal(filtered.length)}}
-      </p>
-      <p class="col-xs-4 text-center" ng-if="pgTotal(filtered.length) > 0">
-      {{pgCur+1}}/{{pgTotal(filtered.length)}}
-      </p>
-      <button class="col-xs-4 btn btn-warning"
-              ng-disabled="pgCur >= filtered.length/pgSize - 1" 
-              ng-click="pgCur=pgCur+1">
-        <span style="color:black">Next</span>
-      </button>
+    <!-- Pagination button control -->
+    <div class="row home_prevnext">
+        <div class="col-xs-12">
+            <button class="col-xs-4 btn btn-warning"
+                ng-disabled="pgCur == 0" ng-click="pgCur=pgCur-1">
+                <span style="color:black">Previous</span>
+            </button>
+            <p class="col-xs-4 text-center" ng-if="pgTotal(filtered.length) <= 0">
+            0/{{pgTotal(filtered.length)}}
+            </p>
+            <p class="col-xs-4 text-center" ng-if="pgTotal(filtered.length) > 0">
+            {{pgCur+1}}/{{pgTotal(filtered.length)}}
+            </p>
+            <button class="col-xs-4 btn btn-warning"
+                ng-disabled="pgCur >= filtered.length/pgSize - 1" 
+                ng-click="pgCur=pgCur+1">
+                <span style="color:black">Next</span>
+            </button>
+        </div>
     </div>
-  </div>
-  {% endraw %}
+    {% endraw %}
 </div>
 {% endblock %}
