@@ -77,7 +77,7 @@ def rate():
         conn = sqlite3.connect('reviews.sqlite3')
         cursor = conn.cursor()
         results = []
-        for row in cursor.execute("select user,name,rating from reviews where user='{0}'".format("headlessparrot")):
+        for row in cursor.execute("select user,name,rating from reviews where user='{0}'".format(user)):
             results.append(row)
         return jsonify(user_rating=results)
 
