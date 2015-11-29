@@ -44,13 +44,16 @@ def suggest():
                 cntr += 1
             return jsonify(favorites=favorites)
 
-
+list_memo = [None]
 @application.route('/list')
 def list_drinks():
     """
     List all drinks, sorted alphabetically
     :return:
     """
+    global list_memo
+    if list_memo[0]:
+        return list_memo[0]
     conn = sqlite3.connect('reviews.sqlite3')
     cursor = conn.cursor()
     results = []
@@ -64,6 +67,7 @@ def list_drinks():
         itemDict["name"] = choices[cntr]
         choices[cntr] = itemDict
     choices = sorted(choices, key=lambda x: x['name'])
+    list_memo[0] = jsonify(choices=choices)
     return jsonify(choices=choices)
 
 
