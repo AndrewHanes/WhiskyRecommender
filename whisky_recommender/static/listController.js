@@ -25,12 +25,42 @@ boozeDataApp.controller('BoozeListCtrl', function ($scope, $http, $q) {
         //search param
         $scope.searchBooze = '';
         //handle dynamic recomendations loading
-        $scope.suggest = {}
+        $scope.suggest = {};
+        $scope.user_reviews = {};
+
+        $scope.setReview = function(name) {
+            $http.post('/set_rate', {params: {"name": name, rating: $scope.user_reviews[name]}}).then(function(data) {
+            });
+
+        };
+
         $scope.clickSuggest = function(booze) {
             booze.expand = true;
             $http.get('/suggest', {params: {"name": booze.name}}).then( function(data) {
                 $scope.suggest[booze.name] = data.data['favorites'];
-            })
+                $(data.data['favorites']).each(function(k,v) {
+                    $http.get('/get_rate?name='+ v.name).then(function(data) {
+                        var rating = data.data['user_rating'];
+                        if(!rating[0]) {
+                            rating = 0;
+                        }
+                        else {
+                            rating = rating[0][2];
+                        }
+                        var name = v.name;
+                        $scope.user_reviews[name] = rating;
+                    });
+                });
+            });
+            //$http.post('/get_rate' {})
+        }
+
+        $scope.get_review = function(name) {
+            console.log(name);
+            if($scope.user_reviews[name]) {
+                return $scope.user_reviews[name];
+            }
+            return "Rate Now";
         }
     });
     $scope.orderProp = 'age';

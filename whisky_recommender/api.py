@@ -66,37 +66,46 @@ def list_drinks():
     choices = sorted(choices, key=lambda x: x['name'])
     return jsonify(choices=choices)
 
-@application.route('/get_rate', methods = ['GET'])
+
+@application.route('/get_rate', methods=['GET'])
 def get_rate():
+    if not has_user():
+        return jsonify(dict(status='Log in to review'))
     user = get_user()
-    #if not user:
-        #raise Exception("Not Logged In")
+    name = request.args.get('name', False)
+    if not name:
+        return jsonify(dict(status='No drink name given'))
+    # if not user:
+    # raise Exception("Not Logged In")
     """Returns list of all reviews by user"""
     conn = sqlite3.connect('reviews.sqlite3')
     cursor = conn.cursor()
     results = []
-    for row in cursor.execute("SELECT user,name,rating FROM reviews WHERE user=?", (user,)):
+    for row in cursor.execute("SELECT user,name,rating FROM reviews WHERE user=? and name=?", (user, name)):
         results.append(row)
     return jsonify(user_rating=results)
 
-@application.route('/set_rate', methods = ['POST'])
+
+@application.route('/set_rate', methods=['POST'])
 def set_rate():
     """modify/update the rating for user"""
-    #if not user:
-        #raise Exception("Not Logged In")
-    #user = get_user()
+    # if not user:
+    # raise Exception("Not Logged In")
+    user = get_user()
+    if not user:
+        return jsonify(dict(status='Log in to review'))
 
-    data = request.form # a multidict containing POST data
+    data = request.form  # a multidict containing POST data
     conn = sqlite3.connect('reviews.sqlite3')
     cursor = conn.cursor()
 
     # Comment out for prod
-    user = request.form['user']
-    name = request.form['name']
-    rating = request.form['rating']
+    # user = request.form['user'] Insecure
+    name = request.json['params']['name']
+    rating = request.json['params']['rating']
 
     if int(rating) > 100 or int(rating) < 0:
-        return "ERROR"
+        return jsonify(dict(status='Invalid range'))
 
     if int(rating) == 0:
         delete = True
@@ -111,19 +120,20 @@ def set_rate():
         cursor.execute('DELETE FROM reviews WHERE user=? AND name=?', (user, name))
         conn.commit()
         conn.close()
-        return 'Delete'
+        return jsonify(dict(status='Deleted Rating'))
 
     elif results and not delete:
         cursor.execute('UPDATE reviews SET rating=? WHERE user=? AND name=?', (rating, user, name))
         conn.commit()
         conn.close()
-        return 'Update'
+        return jsonify(dict(status='Updated Rating'))
 
     else:
         cursor.execute('INSERT INTO reviews (user,name,rating) VALUES (?, ?, ?)', (user, name, rating))
         conn.commit()
         conn.close()
-        return 'OK'
+        return jsonify(dict(status='Ok'))
+
 
 def has_user():
     return 'user' in session and session['user']
