@@ -9,7 +9,7 @@ Written for beverage fermentation and distillation
 from uuid import uuid4
 import sqlite3
 import flask
-from flask import Flask, request, jsonify, render_template, session
+from flask import Flask, request, jsonify, render_template, session, abort
 from whisky_recommender.reddit import reddit_get_access_token, reddit_get_username
 from whisky_recommender.suggest_lib import get_reviewers, find_favorites
 import whisky_recommender.config
@@ -66,28 +66,64 @@ def list_drinks():
     choices = sorted(choices, key=lambda x: x['name'])
     return jsonify(choices=choices)
 
-@application.route('/rate', methods = ['GET', 'POST', 'DELETE'])
-def rate():
+@application.route('/get_rate', methods = ['GET'])
+def get_rate():
     user = get_user()
-    if not user:
-        raise Exception("Not Logged In")
+    #if not user:
+        #raise Exception("Not Logged In")
+    """Returns list of all reviews by user"""
+    conn = sqlite3.connect('reviews.sqlite3')
+    cursor = conn.cursor()
+    results = []
+    for row in cursor.execute("SELECT user,name,rating FROM reviews WHERE user=?", (user,)):
+        results.append(row)
+    return jsonify(user_rating=results)
 
-    if request.method == 'GET':
-        """Returns list of all reviews by user"""
-        conn = sqlite3.connect('reviews.sqlite3')
-        cursor = conn.cursor()
-        results = []
-        for row in cursor.execute("select user,name,rating from reviews where user='{0}'".format(user)):
-            results.append(row)
-        return jsonify(user_rating=results)
+@application.route('/set_rate', methods = ['POST'])
+def set_rate():
+    """modify/update the rating for user"""
+    #if not user:
+        #raise Exception("Not Logged In")
+    #user = get_user()
 
-    if request.method == 'POST':
-        """modify/update the rating for user"""
-        data = request.form # a multidict containing POST data
+    data = request.form # a multidict containing POST data
+    conn = sqlite3.connect('reviews.sqlite3')
+    cursor = conn.cursor()
 
-    if request.method == 'DELETE':
-        """Delete rating for user"""
-        pass
+    # Comment out for prod
+    user = request.form['user']
+    name = request.form['name']
+    rating = request.form['rating']
+
+    if int(rating) > 100 or int(rating) < 0:
+        return "ERROR"
+
+    if int(rating) == 0:
+        delete = True
+    else:
+        delete = False
+
+    results = []
+    for row in cursor.execute('select user,name,rating from reviews where user=? and name=?', (user, name)):
+        results.append(row)
+
+    if results and delete:
+        cursor.execute('DELETE FROM reviews WHERE user=? AND name=?', (user, name))
+        conn.commit()
+        conn.close()
+        return 'Delete'
+
+    elif results and not delete:
+        cursor.execute('UPDATE reviews SET rating=? WHERE user=? AND name=?', (rating, user, name))
+        conn.commit()
+        conn.close()
+        return 'Update'
+
+    else:
+        cursor.execute('INSERT INTO reviews (user,name,rating) VALUES (?, ?, ?)', (user, name, rating))
+        conn.commit()
+        conn.close()
+        return 'OK'
 
 def has_user():
     return 'user' in session and session['user']
