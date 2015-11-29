@@ -39,22 +39,32 @@
                                         ng-click="booze.expand=false">
                                         <span style="color:black">{{booze.name}}</span>
                                     </button>
-
+                                    {% endraw %}
+                                    {% if user %}
+                                    {% raw %}
                                     <span ng-if="booze.expand" class="badge" ng-click="ratePrompt(booze.name); setReview(booze.name)">
                                         <span class="" ng-show="user_reviews[booze.name] != 0">Your Score for {{ booze.name }}:</span>
                                         <span ng-bind="user_reviews[booze.name] != 0 ? user_reviews[booze.name] : 'Click to Rate ' + booze.name"/>
                                     </span>
+                                    {% endraw %}
+                                    {% endif %}
+                                    {% raw %}
                                 </div>
                                 <div class="row" ng-cloak ng-if="booze.expand" ng-repeat-end="">
                                     <ul class="list-group" ng-repeat="bRec in suggest[booze.name] | orderBy:score">
                                         <li class="list-group-item list-group-item-warning">
                                             <span class="badge">Average Score: {{bRec.score | number:2}}</span>
                                             {{bRec.name}}
+                                            {% endraw %}
+                                            {% if user %}
+                                            {% raw %}
                                             <span class="badge" ng-click="ratePrompt(bRec.name); setReview(bRec.name)">
                                                 <span class="review" ng-show="user_reviews[bRec.name] != 0">Your Score:</span>
                                                 <span ng-bind="user_reviews[bRec.name] != 0 ? user_reviews[bRec.name] : 'Click to Rate'"/>
                                             </span>
-
+                                            {% endraw %}
+                                            {% endif %}
+                                            {% raw %}
                                         </li>
                                     </ul>
                                     <!-- Fail-over; no suggestions -->
