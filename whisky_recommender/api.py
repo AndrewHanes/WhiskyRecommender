@@ -74,7 +74,7 @@ def get_rate():
     if not name:
         return jsonify(dict(status='No drink name given'))
     if not has_user():
-        return dict(user_rating=dict())
+        return dict(user_rating=[])
     # if not user:
     # raise Exception("Not Logged In")
     """Returns list of all reviews by user"""
