@@ -69,12 +69,12 @@ def list_drinks():
 
 @application.route('/get_rate', methods=['GET'])
 def get_rate():
-    if not has_user():
-        return jsonify(dict(status='Log in to review'))
     user = get_user()
     name = request.args.get('name', False)
     if not name:
         return jsonify(dict(status='No drink name given'))
+    if not has_user():
+        return dict(user_rating=dict())
     # if not user:
     # raise Exception("Not Logged In")
     """Returns list of all reviews by user"""
