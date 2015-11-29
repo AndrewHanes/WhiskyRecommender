@@ -36,15 +36,18 @@ boozeDataApp.controller('BoozeListCtrl', function ($scope, $http, $q) {
 
         $scope.ratePrompt = function(name) {
             var score = 50;
-            do {
-                score = window.prompt("Enter Rating (1 - 100)", score);
-                if(/^\+?\d+$/.test(score)) {
-                    score = parseInt(score);
+            score = window.prompt("Enter Rating (1 - 100)", score);
+            if(/^\+?\d+$/.test(score)) {
+                score = parseInt(score);
+                if(score > 100 || score < 1) {
+                    alert("Score must be between 1 and 100");
+                    return;
                 }
-                else {
-                    score = -1;
-                }
-            } while((score > 100 || score < 1) && score != 0);
+            }
+            else {
+                alert("Invalid Score");
+                return;
+            }
             $scope.user_reviews[name] = score;
         };
 
