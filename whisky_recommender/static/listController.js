@@ -34,6 +34,20 @@ boozeDataApp.controller('BoozeListCtrl', function ($scope, $http, $q) {
 
         };
 
+        $scope.ratePrompt = function(name) {
+            var score = 50;
+            do {
+                score = window.prompt("Enter Rating (1 - 100)", score);
+                if(/^\+?\d+$/.test(score)) {
+                    score = parseInt(score);
+                }
+                else {
+                    score = -1;
+                }
+            } while((score > 100 || score < 1) && score != 0);
+            $scope.user_reviews[name] = score;
+        };
+
         $scope.clickSuggest = function(booze) {
             booze.expand = true;
             $http.get('/suggest', {params: {"name": booze.name}}).then( function(data) {
@@ -48,7 +62,7 @@ boozeDataApp.controller('BoozeListCtrl', function ($scope, $http, $q) {
                             rating = rating[0][2];
                         }
                         var name = v.name;
-                        $scope.user_reviews[name] = rating;
+                        $scope.user_reviews[name] = parseInt(rating);
                     });
                 });
             });

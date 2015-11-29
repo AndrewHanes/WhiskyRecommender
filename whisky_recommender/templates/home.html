@@ -43,9 +43,13 @@
                                 <div class="row" ng-cloak ng-if="booze.expand" ng-repeat-end="">
                                     <ul class="list-group" ng-repeat="bRec in suggest[booze.name] | orderBy:score">
                                         <li class="list-group-item list-group-item-warning">
-                                        <span class="badge">{{bRec.score | number:2}}</span>
-                                        {{bRec.name}}
-                                        <span ng-click="user_reviews[bRec.name] = 50; setReview(bRec.name)" class="review">Review:</span><span ng-bind="user_reviews[bRec.name]"/>
+                                            <span class="badge">Average Score: {{bRec.score | number:2}}</span>
+                                            {{bRec.name}}
+                                            <span class="badge" ng-if="user_reviews[bRec.name] > -1">
+                                                <span ng-click="ratePrompt(bRec.name); setReview(bRec.name)" class="review">Your Score:</span>
+                                                <span ng-bind="user_reviews[bRec.name]"/>
+                                            </span>
+
                                         </li>
                                     </ul>
                                     <!-- Fail-over; no suggestions -->
