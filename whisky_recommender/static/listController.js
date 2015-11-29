@@ -55,6 +55,17 @@ boozeDataApp.controller('BoozeListCtrl', function ($scope, $http, $q) {
             booze.expand = true;
             $http.get('/suggest', {params: {"name": booze.name}}).then( function(data) {
                 $scope.suggest[booze.name] = data.data['favorites'];
+                $http.get('/get_rate?name='+ booze.name).then(function(data) {
+                    var rating = data.data['user_rating'];
+                    if (!rating[0]) {
+                        rating = 0;
+                    }
+                    else {
+                        rating = rating[0][2];
+                    }
+                    var name = booze.name;
+                    $scope.user_reviews[name] = parseInt(rating);
+                });
                 $(data.data['favorites']).each(function(k,v) {
                     $http.get('/get_rate?name='+ v.name).then(function(data) {
                         var rating = data.data['user_rating'];

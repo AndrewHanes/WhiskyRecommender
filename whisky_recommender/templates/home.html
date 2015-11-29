@@ -39,6 +39,11 @@
                                         ng-click="booze.expand=false">
                                         <span style="color:black">{{booze.name}}</span>
                                     </button>
+
+                                    <span ng-if="booze.expand" class="badge" ng-click="ratePrompt(booze.name); setReview(booze.name)">
+                                        <span class="" ng-show="user_reviews[booze.name] != 0">Your Score for {{ booze.name }}:</span>
+                                        <span ng-bind="user_reviews[booze.name] != 0 ? user_reviews[booze.name] : 'Click to Rate ' + booze.name"/>
+                                    </span>
                                 </div>
                                 <div class="row" ng-cloak ng-if="booze.expand" ng-repeat-end="">
                                     <ul class="list-group" ng-repeat="bRec in suggest[booze.name] | orderBy:score">
